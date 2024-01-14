@@ -1,0 +1,23 @@
+{
+  "name": "dibi-leksiro",
+  "version": "1.0.1",
+  "description": "",
+  "main": "./application/index.html",
+  "node-main": "./background.js",
+  "inject_js_end": "./background.js",
+  "icon": "./application/assets/img/logoMedium.png",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-notifier": "^10.0.1"
+  },
+  "window": {
+    "icon": "./application/assets/img/logo2.png"
+  },
+  "icons": {
+    "256": "./application/assets/img/logo2.png"
+  }
+}

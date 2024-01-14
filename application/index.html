@@ -1,0 +1,199 @@
+<html lang="fr" encoding="utf-8">
+
+<head>
+    <title>Dibi Leksiro App - v1.0.1</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta charset="utf-8">
+
+    <style>
+
+        body {
+            margin: 0;
+            background-color: rgb(44, 44, 44);
+            color: white;
+            font-family: consolas;
+        }
+
+        h2 {
+            font-family: Calibri;
+        }
+
+    .centerdiv {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0px auto;
+        height: 100%;
+        width: 100%;
+    }
+    .centerdiv > div.content {
+        display: flex;
+        flex-direction: column;
+        margin: 0px auto;
+        width: fit-content;
+        justify-content: center;
+        align-items: center;
+    }
+    #loadingbar {
+        width: 50vw;
+        max-width: 700px;
+    }
+    div#loadingbar {
+        background-color: #f1f1f1!important;
+    }
+    div#loadingbar_fill {
+        background-color: #6be619!important;
+    }
+
+    .embeddedWebsite {
+        border: none;
+    }
+    .hidden {
+        display: none;
+    }
+
+    .aboveAll {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 99999;
+    }
+    .aboveAll > button {
+        font-size: 10px;
+    }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="loadingScreen" class="centerdiv">
+        <div class="content">
+            <div id="loadingbar">
+                <div id="loadingbar_fill" style="width:0%;height:20px;"></div>
+              </div>
+            <h2>Chargement ...</h2>
+        </div>
+
+    </div>
+
+    <div class="aboveAll">
+        <button onclick="selectSite(0)">dibi-dictionary.onrender.com</button>
+        <button onclick="selectSite(1)">dibi-leksiro.fr</button>
+    </div>
+
+    <iframe id="embeddedWebsite1"
+            class="embeddedWebsite"
+            src="about:blank"
+            style="width: 100%; height:100%;"
+            seamless="true"
+            nwdisable
+            nwfaketop
+        class="hidden">            
+    </iframe>
+
+    <iframe id="embeddedWebsite2"
+            class="embeddedWebsite"
+            src="about:blank"
+            style="width: 100%; height:100%;"
+            seamless="true"
+            nwdisable
+            nwfaketop
+        class="hidden">            
+    </iframe>
+    
+</body>
+
+<script src="./background.js"></script>
+<script>
+
+
+
+
+
+/* Fonctions de gestion de l'affichage */
+function hideWebsite() {
+    document.getElementById("loadingScreen").classList.remove("hidden")
+    document.getElementById("embeddedWebsite1").classList.add("hidden")
+    document.getElementById("embeddedWebsite2").classList.add("hidden")
+}
+function showWebsite(num) {
+    document.getElementById("loadingScreen").classList.add("hidden")
+    if(num == 0) {
+        document.getElementById("embeddedWebsite1").classList.remove("hidden")
+        document.getElementById("embeddedWebsite2").classList.add("hidden")
+    } else if(num == 1) {
+        document.getElementById("embeddedWebsite1").classList.add("hidden")
+        document.getElementById("embeddedWebsite2").classList.remove("hidden")
+    }
+}
+
+function selectSite(num) {
+    showWebsite(num)
+}
+
+
+/* Initialisation des iframes */
+let WebsiteURL = {
+    onrender: "https://dibi-dictionary.onrender.com/",
+    leksiro: "http://dibi-leksiro.fr"
+}
+
+document.getElementById("embeddedWebsite1").src = WebsiteURL.onrender
+document.getElementById("embeddedWebsite2").src = WebsiteURL.leksiro
+
+
+setInterval(() => {
+    /* Moteur de recherche dibi */
+    try {
+        let a_element = [...frames[0].document.getElementsByTagName("a")].filter(x => x.href == "https://clikari.disly.fr/")[0]
+        a_element.href = "https://search.dirtybiologistan.com/"
+        a_element.textContent = "Dibim, moteur de recherche Dibi"
+    } catch(e) { }
+
+
+    /* Patch dibi-leksiro /auth/discord */
+    try {
+        let btn_a = document.getElementById("embeddedWebsite2").contentWindow.document.getElementById("connection-displayer").getElementsByClassName("button-like")[0]
+        btn_a.target = "_BLANK"
+        btn_a.href = "http://dibi-leksiro.fr/auth/discord"
+    } catch(e) {
+        console.log(e)
+    }
+
+
+}, 200)
+
+
+function loading(num=null){
+    hideWebsite()
+    var num = 0;
+
+    let delay = 1; // milliseconde pour chaque unité de maxI
+    let maxI = 1000 // Quand on fait x2, il faut 
+    let stepDividerBy = maxI/100
+
+    for(let i=0; i<=maxI; i++) {
+        setTimeout(function() { 
+            document.getElementById("loadingbar_fill").style.width = `${i/stepDividerBy}%`
+            //console.log(`${i/10}%`)
+        },i*delay);
+    };
+    setTimeout(() => {
+        console.log("Loading page...")
+        //document.location.href = WebsiteURL
+        if(num != null) {
+            showWebsite(num)
+        }
+    }, (maxI+1)*delay);
+
+}
+
+loading(0)
+
+</script>
+
+
+</html>
+
